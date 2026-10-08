@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Pubgolf Scorekort</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f0df;--card:#fffaf0;--ink:#1f2a1c;--mute:#6b6f5c;--green:#1f6b3a;--green2:#2e8b4f;--amber:#e8a317;--red:#c8442f;--line:#e2d9bd;--me:#fff1c2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13200f;--card:#1c2d17;--ink:#f3ecd2;--mute:#a7ae92;--green:#4cb36f;--green2:#3a9a5b;--amber:#f2b632;--red:#ff7a63;--line:#2f4527;--me:#3a3a14}}
+:root[data-theme="dark"]{--bg:#13200f;--card:#1c2d17;--ink:#f3ecd2;--mute:#a7ae92;--green:#4cb36f;--green2:#3a9a5b;--amber:#f2b632;--red:#ff7a63;--line:#2f4527;--me:#3a3a14}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fredoka',system-ui,-apple-system,sans-serif;font-size:16px;padding:0 12px 40px;max-width:640px;margin:0 auto}
+h1{font-size:26px;margin:16px 0 2px;color:var(--green)}
+.sub{color:var(--mute);margin:0 0 12px;font-size:14px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px;margin:12px 0}
+.bar-title{font-size:22px;font-weight:700;margin:0}
+.par{display:inline-block;background:var(--amber);color:#2a1d00;border-radius:999px;padding:2px 12px;font-weight:700;font-size:15px;margin-left:6px;vertical-align:middle}
+.chips{display:flex;gap:6px;overflow-x:auto;margin:8px 0}
+.chip{flex:none;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:14px}
+.chip.on{background:var(--green);border-color:var(--green);color:#fff}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0}
+.stepper button{width:80px;height:80px;border-radius:50%;border:none;background:var(--green2);color:#fff;font:700 44px/1 'Fredoka',sans-serif}
+.stepper button:active{transform:scale(.94)}
+.big{font-size:84px;font-weight:700;line-height:1;text-align:center;flex:1}
+.big small{display:block;font-size:20px;color:var(--mute);font-weight:600;margin-top:4px}
+.quick{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:12px}
+.quick button{height:44px;border-radius:10px;border:2px solid var(--line);background:transparent;color:var(--ink);font:600 18px 'Fredoka',sans-serif}
+.quick button.on{background:var(--amber);border-color:var(--amber);color:#2a1d00}
+.cta{width:100%;height:60px;border-radius:16px;border:none;background:var(--amber);color:#2a1d00;font:700 21px 'Fredoka',sans-serif}
+.cta.alt{background:var(--green);color:#fff;height:52px;font-size:18px}
+.cta:disabled{opacity:.5}
+input{width:100%;height:54px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:20px;padding:0 14px;margin-bottom:10px}
+.row2{display:grid;grid-template-columns:1fr 100px;gap:10px}
+.msg{min-height:20px;font-size:14px;color:var(--red);margin:6px 0 0}
+.ok{color:var(--green)}
+details summary{font-weight:700;font-size:18px;padding:6px 0;cursor:pointer}
+.wrap{overflow-x:auto;border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:8px 8px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;color:var(--mute);font-weight:600}
+th small{display:block;font-weight:400}
+td.n,th.n{text-align:left;position:sticky;left:0;background:var(--card);z-index:1;width:96px;min-width:96px;max-width:96px;overflow:hidden;text-overflow:ellipsis;padding-left:6px;padding-right:4px}
+td.t,th.t{position:sticky;left:96px;background:var(--card);z-index:1;min-width:84px;box-shadow:3px 0 5px rgba(0,0,0,.15)}
+tr.me td{background:var(--me);font-weight:700}
+tr.me td.n{background:var(--me)}
+.s{font-size:18px;font-weight:700;display:block;line-height:1.1}
+.d{font-size:12px;color:var(--mute)}
+.under{color:var(--green)}.over{color:var(--red)}.even{color:var(--mute)}
+.tot{font-size:22px;font-weight:700;display:block;line-height:1.2;margin-bottom:4px}.tot+.d{display:block;line-height:1.3}
+.rank{color:var(--mute);font-weight:600;margin-right:4px}
+#join{position:fixed;inset:0;background:var(--bg);z-index:10;display:none;flex-direction:column;justify-content:center;padding:24px;max-width:640px;margin:0 auto}
+.pen{display:flex;align-items:center;justify-content:space-between;gap:8px;border:2px dashed var(--red);border-radius:14px;padding:8px 10px;margin-bottom:12px;font-size:15px}.pen div{display:flex;align-items:center;gap:12px}.pen button{width:48px;height:48px;border-radius:50%;border:none;background:var(--red);color:#fff;font:700 26px/1 'Fredoka',sans-serif}.pen b{font-size:26px;min-width:24px;text-align:center}sup.pk{font-size:11px;color:var(--red);margin-left:1px}.empty{color:var(--mute);text-align:center;padding:12px}
+</style>
+</head>
+<body>
+<style>
+#join{overflow-y:auto}
+.mem{display:flex;gap:6px;margin:10px 0 0}
+.mem .chip{flex:1;font-size:16px;padding:10px 6px;font-weight:600}
+.mem .chip.done{border-color:var(--green2)}
+h2{margin:18px 0 6px}
+.lnk{background:none;border:none;color:var(--mute);font:inherit;font-size:14px;text-decoration:underline;padding:4px 0}
+.part{font-size:11px;color:var(--amber)}
+</style>
+<div id="join">
+  <h1>⛳🍺 Pubgolf</h1>
+  <p class="sub" id="joinSub">Opret jeres hold. Kun én fra holdet logger scores.</p>
+  <input id="tn" maxlength="24" placeholder="Holdnavn" autocomplete="off">
+  <input id="m0" maxlength="20" placeholder="Spiller 1" autocomplete="off">
+  <input id="m1" maxlength="20" placeholder="Spiller 2" autocomplete="off">
+  <input id="m2" maxlength="20" placeholder="Spiller 3 (valgfri)" autocomplete="off">
+  <button class="cta" id="joinBtn">Gem hold</button>
+  <button class="lnk" id="cancelBtn" style="display:none">Annullér</button>
+  <p class="msg" id="joinMsg"></p>
+</div>
+
+<h1>⛳🍺 Pubgolf Scorekort</h1>
+<p class="sub" id="who">Forbinder…</p>
+
+<div class="card" id="entry"><p class="empty">Ingen barer endnu – tilføj den første herunder 👇</p></div>
+
+<div class="card">
+  <details id="addd">
+    <summary>➕ Ny bar</summary>
+    <input id="bn" maxlength="30" placeholder="Barens navn">
+    <input id="bd" maxlength="60" placeholder="Hvad drikker vi? (fx stor fadøl, shot…)">
+    <div class="row2"><div class="sub" style="align-self:center;margin:0">Par (forventede slurke)</div><input id="bp" type="number" inputmode="numeric" min="1" max="20" value="3" style="margin:0"></div>
+    <div style="height:10px"></div>
+    <button class="cta alt" id="addBtn">Tilføj &amp; gør aktiv for alle</button>
+    <p class="msg" id="addMsg"></p>
+  </details>
+  <button class="lnk" id="editTeam">✏️ Redigér hold &amp; spillere</button>
+</div>
+
+<h2>🏆 Holdstilling</h2>
+<div class="card" style="padding:6px"><div class="wrap" id="tboard"><p class="empty">Ingen hold endnu</p></div></div>
+<h2>🍺 Individuel stilling</h2>
+<div class="card" style="padding:6px"><div class="wrap" id="pboard"><p class="empty">Ingen spillere endnu</p></div></div>
+<p class="sub">Laveste total ift. par vinder. Holdets score er summen af spillernes scores. Straf lægges oven i scoren.</p>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=d=>d===0?'E':d>0?'+'+d:'\u2212'+Math.abs(d);
+const fmt1=d=>{const r=Math.round(d*10)/10;return r===0?'E':(r>0?'+':'\u2212')+Math.abs(r).toString().replace('.',',')};
+const cls=d=>d<0?'under':d>0?'over':'even';
+let db=null,me=null,bars=[],teams={},scores={},picked=null,mi=0,draft=null,dpen=0,draftKey=null,lastBarCount=0,editing=false;
+
+const members=id=>(teams[id]&&teams[id].members)||[];
+const getE=(id,bid,i)=>{const m=scores[id]&&scores[id].m;return(m&&m[bid]&&m[bid][i])||null};
+const myM=()=>JSON.parse(JSON.stringify((scores[me]&&scores[me].m)||{}));
+function curBar(){if(!bars.length)return null;return bars.find(b=>b.id===picked)||bars[bars.length-1]}
+
+function renderEntry(){
+  const el=$('#entry');if(!teams[me])return;
+  const b=curBar(),mem=members(me);
+  if(!b){el.innerHTML='<p class="empty">Ingen barer endnu – tilføj den første herunder 👇</p>';return}
+  if(mi>=mem.length)mi=0;
+  const key=b.id+':'+mi;
+  if(draftKey!==key){draftKey=key;const e=getE(me,b.id,mi);draft=e?e.v:b.par;dpen=e?e.p:0}
+  const saved=getE(me,b.id,mi);
+  const chips=bars.map((x,i)=>`<button class="chip ${x.id===b.id?'on':''}" data-bar="${esc(x.id)}">${i+1}. ${esc(x.name)}</button>`).join('');
+  const mch=mem.map((n,i)=>`<button class="chip ${i===mi?'on':''} ${getE(me,b.id,i)?'done':''}" data-mem="${i}">${getE(me,b.id,i)?'✅ ':''}${esc(n)}</button>`).join('');
+  let q='';for(let i=1;i<=8;i++)q+=`<button data-q="${i}" class="${draft===i?'on':''}">${i}</button>`;
+  el.innerHTML=`<p class="bar-title">📍 ${esc(b.name)}<span class="par">Par ${b.par}</span></p>
+  ${b.drink?`<p class="sub" style="margin:4px 0 0;font-size:17px">🍻 ${esc(b.drink)}</p>`:''}
+  <div class="chips">${chips}</div>
+  <p class="sub" style="margin:8px 0 0">Hvem drikker?</p>
+  <div class="mem">${mch}</div>
+  <div class="stepper"><button data-step="-1" aria-label="Færre">−</button>
+  <div class="big">${draft}<small class="${cls(draft+dpen-b.par)}">${fmt(draft+dpen-b.par)} ift. par${dpen?` (inkl. ${dpen} straf)`:''}</small></div>
+  <button data-step="1" aria-label="Flere">+</button></div>
+  <div class="quick">${q}</div>
+  <div class="pen"><span>⚠️ Straf<br><span class="d">spildt drink, forbudte ord…</span></span><div><button data-pen="-1" aria-label="Fjern en straf">−</button><b>${dpen}</b><button data-pen="1" aria-label="Tilføj en straf">+</button></div></div>
+  <button class="cta" id="saveBtn">${saved?'Opdatér score for '+esc(mem[mi])+' ✅':'Gem score for '+esc(mem[mi])+' 🍺'}</button>
+  <p class="msg" id="saveMsg"></p>`;
+}
+
+function stats(id,i){
+  let diff=0,tot=0,n=0,pt=0;
+  bars.forEach(b=>{const e=getE(id,b.id,i);if(e){diff+=e.v+e.p-b.par;tot+=e.v+e.p;pt+=e.p;n++}});
+  return{diff,tot,n,pt};
+}
+const sortFn=(a,b)=>(a.n===0)-(b.n===0)||a.diff-b.diff||a.tot-b.tot||a.name.localeCompare(b.name);
+const cellFor=(v,pe,par)=>v==null?'<td class="d">–</td>':`<td><span class="s">${v}${pe?`<sup class="pk">+${pe}⚠️</sup>`:''}</span><span class="d ${cls(v+pe-par)}">${fmt(v+pe-par)}</span></td>`;
+const totCell=(r,extra)=>`<td class="t"><span class="tot ${r.n?cls(r.diff):'even'}">${r.n?fmt(r.diff):'–'}</span><span class="d">${r.tot} slurke${r.pt?` · ${r.pt} straf`:''}${extra||''}</span></td>`;
+const table=(first,head,body)=>`<table><thead><tr><th class="n">${first}</th><th class="t">Total</th>${head}</tr></thead><tbody>${body}</tbody></table>`;
+
+function renderBoards(){
+  const tids=Object.keys(teams);
+  if(!tids.length){$('#tboard').innerHTML='<p class="empty">Ingen hold endnu</p>';$('#pboard').innerHTML='<p class="empty">Ingen spillere endnu</p>';return}
+  const head=bars.map((b,i)=>`<th>${i+1}. ${esc(b.name.slice(0,8))}<small>par ${b.par}</small></th>`).join('');
+  const trows=tids.map(id=>{
+    let diff=0,tot=0,n=0,pt=0;const mem=members(id);
+    mem.forEach((_,i)=>{const s=stats(id,i);diff+=s.diff;tot+=s.tot;n+=s.n;pt+=s.pt});
+    return{id,name:teams[id].name||'?',diff,tot,n,pt,mem};
+  }).sort(sortFn);
+  const tb=trows.map((r,i)=>{
+    const cells=bars.map(b=>{
+      let v=0,pe=0,c=0;r.mem.forEach((_,k)=>{const e=getE(r.id,b.id,k);if(e){v+=e.v;pe+=e.p;c++}});
+      if(!c)return'<td class="d">–</td>';
+      const d=v+pe-b.par*c;
+      return`<td><span class="s">${v}${pe?`<sup class="pk">+${pe}⚠️</sup>`:''}</span><span class="d ${cls(d)}">${fmt(d)}</span>${c<r.mem.length?`<span class="part d">${c}/${r.mem.length}</span>`:''}</td>`;
+    }).join('');
+    return`<tr class="${r.id===me?'me':''}"><td class="n"><span class="rank">${i+1}.</span>${esc(r.name)}${r.id===me?' 👈':''}</td>${totCell(r,r.n?`<br>snit ${fmt1(r.diff/r.n)} pr. drink`:'')}${cells}</tr>`;
+  }).join('');
+  $('#tboard').innerHTML=table('Hold',head,tb);
+  const prow=[];
+  tids.forEach(id=>members(id).forEach((nm,i)=>prow.push({id,i,name:nm,team:teams[id].name||'?',...stats(id,i)})));
+  prow.sort(sortFn);
+  const pb=prow.map((r,k)=>{
+    const cells=bars.map(b=>{const e=getE(r.id,b.id,r.i);return cellFor(e?e.v:null,e?e.p:0,b.par)}).join('');
+    return`<tr class="${r.id===me?'me':''}"><td class="n"><span class="rank">${k+1}.</span>${esc(r.name)}<br><span class="d">${esc(r.team)}</span></td>${totCell(r)}${cells}</tr>`;
+  }).join('');
+  $('#pboard').innerHTML=table('Spiller',head,pb);
+}
+function renderAll(){renderEntry();renderBoards()}
+
+$('#entry').addEventListener('click',async e=>{
+  const t=e.target.closest('button');if(!t)return;const b=curBar();
+  if(t.dataset.bar){picked=t.dataset.bar;draftKey=null;renderEntry()}
+  else if(t.dataset.mem){mi=Number(t.dataset.mem);draftKey=null;renderEntry()}
+  else if(t.dataset.step){draft=Math.max(1,Math.min(99,draft+Number(t.dataset.step)));renderEntry()}
+  else if(t.dataset.pen){dpen=Math.max(0,Math.min(20,dpen+Number(t.dataset.pen)));renderEntry()}
+  else if(t.dataset.q){draft=Number(t.dataset.q);renderEntry()}
+  else if(t.id==='saveBtn'&&b){
+    t.disabled=true;const m=$('#saveMsg');
+    try{
+      const all=myM();all[b.id]=all[b.id]||{};all[b.id][mi]={v:draft,p:dpen};
+      await db.doc('tscores/'+me).set({m:all});
+      const mem=members(me);let nx=-1;
+      for(let k=1;k<=mem.length;k++){const j=(mi+k)%mem.length;if(!all[b.id][j]){nx=j;break}}
+      if(nx>=0){mi=nx;draftKey=null;renderEntry()}
+      const mm=$('#saveMsg');if(mm){mm.className='msg ok';mm.textContent='Score gemt! 🎉'}
+    }catch(err){m.className='msg';m.textContent='Kunne ikke gemme scoren. Tjek din internetforbindelse og prøv igen.';t.disabled=false}
+  }
+});
+
+$('#addBtn').onclick=async()=>{
+  const name=$('#bn').value.trim(),drink=$('#bd').value.trim(),par=parseInt($('#bp').value,10),m=$('#addMsg');
+  if(!name||!(par>=1&&par<=20)){m.className='msg';m.textContent='Skriv et navn og et par mellem 1 og 20.';return}
+  try{
+    await db.collection('bars').add({name,drink,par,createdAt:Date.now(),by:me});
+    $('#bn').value='';$('#bd').value='';picked=null;m.className='msg ok';m.textContent='Baren er tilføjet!';$('#addd').open=false;
+  }catch(err){m.className='msg';m.textContent='Kunne ikke tilføje baren. Prøv igen.'}
+};
+
+function openJoin(edit){
+  editing=edit;const t=teams[me]||{};
+  $('#tn').value=t.name||'';[0,1,2].forEach(i=>$('#m'+i).value=(t.members&&t.members[i])||'');
+  $('#cancelBtn').style.display=edit?'block':'none';
+  $('#joinSub').textContent=edit?'Redigér holdnavn og spillere.':'Opret jeres hold. Kun én fra holdet logger scores.';
+  $('#join').style.display='flex';
+}
+$('#editTeam').onclick=()=>openJoin(true);
+$('#cancelBtn').onclick=()=>{$('#join').style.display='none'};
+
+$('#joinBtn').onclick=async()=>{
+  const name=$('#tn').value.trim(),mem=[0,1,2].map(i=>$('#m'+i).value.trim()).filter(Boolean),m=$('#joinMsg');
+  if(!name||mem.length<2){m.textContent='Skriv et holdnavn og mindst 2 spillere.';return}
+  try{
+    await db.doc('teams/'+me).set({name,members:mem,joinedAt:(teams[me]&&teams[me].joinedAt)||Date.now()});
+    m.textContent='';$('#join').style.display='none';draftKey=null;
+  }catch(err){m.textContent='Kunne ikke gemme holdet. Tjek din internetforbindelse og prøv igen.'}
+};
+
+const FIREBASE_CONFIG={
+  apiKey:'AIzaSyDVObYuaPSTo2akNcfskBCat6lj6etcFyE',
+  authDomain:'pubgolf-53c9f.firebaseapp.com',
+  projectId:'pubgolf-53c9f',
+  appId:'1:942239906755:web:2854c67eafb8f0a2131b76'
+};
+async function start(){
+  if(!FIREBASE_CONFIG.apiKey){$('#who').textContent='Firebase er ikke sat op endnu – se vejledningen.';return}
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    const cred=await firebase.auth().signInAnonymously();
+    me=cred.user.uid;db=firebase.firestore();
+  }catch(err){$('#who').textContent='Kunne ikke forbinde. Tjek Firebase-opsætningen.';return}
+  db.collection('bars').orderBy('createdAt','asc').onSnapshot(s=>{
+    bars=s.docs.map(d=>({id:d.id,...d.data()}));
+    if(bars.length!==lastBarCount){picked=null;lastBarCount=bars.length;draftKey=null}
+    renderAll();
+  });
+  db.collection('teams').onSnapshot(s=>{
+    teams={};s.docs.forEach(d=>teams[d.id]=d.data());
+    if(teams[me]){$('#who').textContent='Hold '+teams[me].name+' ('+teams[me].members.join(', ')+')';if(!editing)$('#join').style.display='none'}
+    else{$('#who').textContent='Opret dit hold for at komme med';if(!editing)openJoin(false)}
+    renderAll();
+  });
+  db.collection('tscores').onSnapshot(s=>{
+    scores={};s.docs.forEach(d=>scores[d.id]=d.data());renderAll();
+  });
+}
+start();
+</script>
+</body>
+</html>
